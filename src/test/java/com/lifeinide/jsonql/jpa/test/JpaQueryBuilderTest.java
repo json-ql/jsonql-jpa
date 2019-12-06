@@ -1,29 +1,29 @@
-package com.lifeinide.rest.filter.test.hibernate;
+package com.lifeinide.jsonql.jpa.test;
 
 import com.lifeinide.jsonql.core.dto.Page;
-import com.lifeinide.jsonql.core.intr.FilterQueryBuilder;
 import com.lifeinide.jsonql.core.test.BaseQueryBuilderTest;
-import com.lifeinide.jsonql.core.test.IBaseEntity;
-import com.lifeinide.jsonql.core.test.IEntity;
+import com.lifeinide.jsonql.jpa.JpaFilterQueryBuilder;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
-import java.io.Serializable;
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 /**
- * @see BaseQueryBuilderTest
+ * Main JPA filtering test.
+ *
  * @author Lukasz Frankowski
  */
-public abstract class BaseHibernateJpaTest<
-	ID extends Serializable,
-	A extends IBaseEntity<ID>,
-	E extends IEntity<ID, A>,
-	F extends FilterQueryBuilder<E, Page<E>, ?, F>
-> extends BaseQueryBuilderTest<EntityManager, ID, A, E, F> {
+public class JpaQueryBuilderTest extends BaseQueryBuilderTest<
+	EntityManager,
+	Long,
+	JpaAssociatedEntity,
+	JpaEntity,
+	JpaFilterQueryBuilder<JpaEntity, Page<JpaEntity>>
+> {
 
 	public static final String PERSISTENCE_UNIT_NAME = "test-jpa";
 
@@ -32,12 +32,28 @@ public abstract class BaseHibernateJpaTest<
 	@BeforeAll
 	public void init() {
 		entityManagerFactory = Persistence.createEntityManagerFactory(PERSISTENCE_UNIT_NAME);
+		doWithEntityManager(em -> populateData(em::persist));
 	}
 
 	@AfterAll
 	public void done() {
 		if (entityManagerFactory!=null)
 			entityManagerFactory.close();
+	}
+
+	@Override
+	protected JpaEntity buildEntity(Long previousId) {
+		return new JpaEntity(previousId==null ? 1L : previousId+1);
+	}
+
+	@Override
+	protected JpaAssociatedEntity buildAssociatedEntity() {
+		return new JpaAssociatedEntity(1L);
+	}
+
+	@Override
+	protected void doTest(BiConsumer<EntityManager, JpaFilterQueryBuilder<JpaEntity, Page<JpaEntity>>> c) {
+		doWithEntityManager(em -> c.accept(em, new JpaFilterQueryBuilder<>(em, JpaEntity.class)));
 	}
 
 	protected void doWithEntityManager(Consumer<EntityManager> c) {

@@ -1,4 +1,4 @@
-package com.lifeinide.rest.filter.test.hibernate.jpa;
+package com.lifeinide.jsonql.jpa.test;
 
 import com.lifeinide.jsonql.core.test.EntityEnum;
 import com.lifeinide.jsonql.core.test.IEntity;
