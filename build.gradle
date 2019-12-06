@@ -1,0 +1,76 @@
+plugins {
+    id 'java'
+    id 'maven'
+    id 'maven-publish'
+}
+
+group 'com.lifeinide.jsonql'
+version '1.0.0'
+description 'JPA filter query builder for JSON-QL.'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+def token = project.findProperty("token")
+if (!token) {
+    try {
+        token = new File(System.getProperty("user.home"), ".github-token").text
+        logger.info("Using token from ~/.github-token.")
+    } catch (e) {
+        logger.warn("Please put personal github token into ~/.github-token file or pass it with -Ptoken=??? parameter.")
+    }
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+        }
+    }
+}
+
+repositories {
+    maven {
+        name = "GitHubPackages"
+        url = uri("https://maven.pkg.github.com/json-ql/jsonql-core")
+        credentials {
+            username = project.findProperty("user") ?: "l0co"
+            password = token
+        }
+    }
+}
+
+dependencies {
+    implementation group: 'com.lifeinide.jsonql', name: 'jsonql-core', version: property('vJsonqlCore')
+
+    testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: property('vJunit')
+    testRuntimeOnly group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: property('vJunit')
+    testRuntimeOnly group: 'ch.qos.logback', name: 'logback-classic', version: property('vLogback')
+}
+
+def installer = install.repositories.mavenInstaller
+
+// alter maven pom
+installer.pom.whenConfigured {pom ->
+    pom.project {
+        name project.name
+        description description
+        url 'https://github.com/json-ql'
+        licenses {
+            license {
+                name 'The Apache Software License, Version 2.0'
+                url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                distribution 'repo'
+            }
+        }
+        // remove test dependencies
+        for (Iterator itr = pom.dependencies.iterator(); itr.hasNext(); )
+            if (itr.next().scope == 'test')
+                itr.remove()
+    }
+}
+
+
