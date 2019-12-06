@@ -1,6 +1,6 @@
-# jsonql-core
+# jsonql-jpa
 
-JPA filter query builder for [jsonql-core](https://github.com/json-ql/jsonql-core). Allows to work with JPA-supported persistence technology like Hibernate.
+JPA filter query builder for [JSON-QL](https://github.com/json-ql). Allows to apply filters with JPA-supported persistence technology like Hibernate.
 
 ## How to use
 
