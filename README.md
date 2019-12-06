@@ -4,7 +4,7 @@ JPA filter query builder for [JSON-QL](https://github.com/json-ql). Allows to ap
 
 ## How to use
 
-To use this library please add it to your gradle/maven dependency with [these remarks](https://github.com/json-ql/jsonql-core#how-to-use):
+To use this library please add it as your gradle/maven dependency with [these remarks](https://github.com/json-ql/jsonql-core#how-to-use):
 
 ```groovy
 dependencies {
