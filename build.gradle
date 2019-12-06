@@ -5,8 +5,15 @@ plugins {
 }
 
 group 'com.lifeinide.jsonql'
-version '1.0.0'
 description 'JPA filter query builder for JSON-QL.'
+
+/*
+  VERSION UPGRADE HOWTO:
+  1. Increment version here
+  2. Tag with the same version tag and push
+  3. Do `gradle publish`
+ */
+version '1.0.0'
 
 sourceCompatibility = 1.8
 

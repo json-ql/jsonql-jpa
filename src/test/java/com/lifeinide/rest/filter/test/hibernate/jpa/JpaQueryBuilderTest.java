@@ -1,7 +1,7 @@
 package com.lifeinide.rest.filter.test.hibernate.jpa;
 
-import com.lifeinide.rest.filter.dto.Page;
-import com.lifeinide.rest.filter.impl.jpa.JpaFilterQueryBuilder;
+import com.lifeinide.jsonql.core.dto.Page;
+import com.lifeinide.jsonql.jpa.JpaFilterQueryBuilder;
 import com.lifeinide.rest.filter.test.hibernate.BaseHibernateJpaTest;
 import org.junit.jupiter.api.BeforeAll;
 
@@ -12,7 +12,7 @@ import java.util.function.BiConsumer;
  * @author Lukasz Frankowski
  */
 public class JpaQueryBuilderTest extends BaseHibernateJpaTest<Long, JpaAssociatedEntity, JpaEntity,
-JpaFilterQueryBuilder<JpaEntity, Page<JpaEntity>>> {
+	JpaFilterQueryBuilder<JpaEntity, Page<JpaEntity>>> {
 
 	@BeforeAll
 	public void populateData() {

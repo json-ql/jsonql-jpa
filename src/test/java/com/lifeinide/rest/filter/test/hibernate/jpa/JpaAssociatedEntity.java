@@ -1,6 +1,6 @@
 package com.lifeinide.rest.filter.test.hibernate.jpa;
 
-import com.lifeinide.rest.filter.test.IBaseEntity;
+import com.lifeinide.jsonql.core.test.IBaseEntity;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;

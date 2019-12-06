@@ -1,10 +1,10 @@
 package com.lifeinide.rest.filter.test.hibernate;
 
-import com.lifeinide.rest.filter.dto.Page;
-import com.lifeinide.rest.filter.intr.FilterQueryBuilder;
-import com.lifeinide.rest.filter.test.BaseQueryBuilderTest;
-import com.lifeinide.rest.filter.test.IBaseEntity;
-import com.lifeinide.rest.filter.test.IEntity;
+import com.lifeinide.jsonql.core.dto.Page;
+import com.lifeinide.jsonql.core.intr.FilterQueryBuilder;
+import com.lifeinide.jsonql.core.test.BaseQueryBuilderTest;
+import com.lifeinide.jsonql.core.test.IBaseEntity;
+import com.lifeinide.jsonql.core.test.IEntity;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 

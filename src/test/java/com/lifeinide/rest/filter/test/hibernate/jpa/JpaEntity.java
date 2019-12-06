@@ -1,7 +1,7 @@
 package com.lifeinide.rest.filter.test.hibernate.jpa;
 
-import com.lifeinide.rest.filter.test.EntityEnum;
-import com.lifeinide.rest.filter.test.IEntity;
+import com.lifeinide.jsonql.core.test.EntityEnum;
+import com.lifeinide.jsonql.core.test.IEntity;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
