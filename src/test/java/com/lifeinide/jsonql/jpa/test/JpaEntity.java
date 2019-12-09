@@ -1,7 +1,7 @@
 package com.lifeinide.jsonql.jpa.test;
 
-import com.lifeinide.jsonql.core.test.EntityEnum;
-import com.lifeinide.jsonql.core.test.IEntity;
+import com.lifeinide.jsonql.core.test.IJsonQLTestEntity;
+import com.lifeinide.jsonql.core.test.JsonQLTestEntityEnum;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -11,7 +11,7 @@ import java.time.LocalDate;
  * @author Lukasz Frankowski
  */
 @Entity
-public class JpaEntity implements IEntity<Long, JpaAssociatedEntity> {
+public class JpaEntity implements IJsonQLTestEntity<Long, JpaAssociatedEntity> {
 
 	@Id private Long id;
 
@@ -24,7 +24,7 @@ public class JpaEntity implements IEntity<Long, JpaAssociatedEntity> {
 	protected LocalDate dateVal;
 
 	@Enumerated(EnumType.STRING)
-	protected EntityEnum enumVal;
+	protected JsonQLTestEntityEnum enumVal;
 
 	@ManyToOne
 	protected JpaAssociatedEntity entityVal;
@@ -87,12 +87,12 @@ public class JpaEntity implements IEntity<Long, JpaAssociatedEntity> {
 	}
 
 	@Override
-	public EntityEnum getEnumVal() {
+	public JsonQLTestEntityEnum getEnumVal() {
 		return enumVal;
 	}
 
 	@Override
-	public void setEnumVal(EntityEnum enumVal) {
+	public void setEnumVal(JsonQLTestEntityEnum enumVal) {
 		this.enumVal = enumVal;
 	}
 

@@ -1,7 +1,7 @@
 package com.lifeinide.jsonql.jpa.test;
 
 import com.lifeinide.jsonql.core.dto.Page;
-import com.lifeinide.jsonql.core.test.BaseQueryBuilderTest;
+import com.lifeinide.jsonql.core.test.JsonQLBaseQueryBuilderTest;
 import com.lifeinide.jsonql.jpa.JpaFilterQueryBuilder;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -17,7 +17,7 @@ import java.util.function.Consumer;
  *
  * @author Lukasz Frankowski
  */
-public class JpaQueryBuilderTest extends BaseQueryBuilderTest<
+public class JpaQueryBuilderTest extends JsonQLBaseQueryBuilderTest<
 	EntityManager,
 	Long,
 	JpaAssociatedEntity,

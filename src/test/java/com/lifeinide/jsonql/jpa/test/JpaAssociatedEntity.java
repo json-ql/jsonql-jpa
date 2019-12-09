@@ -1,6 +1,6 @@
 package com.lifeinide.jsonql.jpa.test;
 
-import com.lifeinide.jsonql.core.test.IBaseEntity;
+import com.lifeinide.jsonql.core.test.IJsonQLBaseTestEntity;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -9,7 +9,7 @@ import javax.persistence.Id;
  * @author Lukasz Frankowski
  */
 @Entity
-public class JpaAssociatedEntity implements IBaseEntity<Long> {
+public class JpaAssociatedEntity implements IJsonQLBaseTestEntity<Long> {
 
 	@Id Long id;
 
