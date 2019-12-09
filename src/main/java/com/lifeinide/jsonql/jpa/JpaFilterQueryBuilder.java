@@ -90,7 +90,7 @@ extends BaseFilterQueryBuilder<E, P, CriteriaQuery<E>, JpaQueryBuilderContext<E>
 	}
 
 	@Override
-	public JpaFilterQueryBuilder<E, P> add(String field, EntityQueryFilter filter) {
+	public JpaFilterQueryBuilder<E, P> add(String field, EntityQueryFilter<?> filter) {
 		if (filter!=null) {
 			// discover id field name of the associated entity
 			Class<?> associatedEntityJavaType = context.getRoot().get(field).getJavaType();
@@ -122,7 +122,7 @@ extends BaseFilterQueryBuilder<E, P, CriteriaQuery<E>, JpaQueryBuilderContext<E>
 	}
 
 	@Override
-	public JpaFilterQueryBuilder<E, P> add(String field, SingleValueQueryFilter filter) {
+	public JpaFilterQueryBuilder<E, P> add(String field, SingleValueQueryFilter<?> filter) {
 		if (filter!=null) {
 			context.getPredicates().add(JpaCriteriaBuilderHelper.INSTANCE.buildCriteria(filter.getCondition(),
 				context.getCb(), context.getRoot().get(field), filter.getValue()));
@@ -131,9 +131,9 @@ extends BaseFilterQueryBuilder<E, P, CriteriaQuery<E>, JpaQueryBuilderContext<E>
 		return this;
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({"unchecked", "rawtypes"})
 	@Override
-	public JpaFilterQueryBuilder<E, P> add(String field, ValueRangeQueryFilter filter) {
+	public JpaFilterQueryBuilder<E, P> add(String field, ValueRangeQueryFilter<? extends Number> filter) {
 		if (filter!=null) {
 			Number from = filter.getFrom();
 			Number to = filter.getTo();
@@ -185,7 +185,7 @@ extends BaseFilterQueryBuilder<E, P, CriteriaQuery<E>, JpaQueryBuilderContext<E>
 		return Optional.empty();
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({"unchecked", "rawtypes"})
 	@Override
 	public P list(Pageable pageable, Sortable<?> sortable) {
 		if (pageable==null)
@@ -194,11 +194,9 @@ extends BaseFilterQueryBuilder<E, P, CriteriaQuery<E>, JpaQueryBuilderContext<E>
 			sortable = BasePageableRequest.ofUnpaged();
 
 		// apply predicates
-		buildPredicate().ifPresent(predicate -> {
-			context.getQuery().where(predicate);
-		});
+		buildPredicate().ifPresent(predicate -> context.getQuery().where(predicate));
 
-		// first we calulate count
+		// first we calculate count
 		Selection<E> selection = context.getQuery().getSelection();
 		CriteriaQuery countQuery = context.getQuery();
 		countQuery.select(context.getCb().count(context.getRoot()));
