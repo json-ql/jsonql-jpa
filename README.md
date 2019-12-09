@@ -105,7 +105,7 @@ public class UserController {
 }
 ```
 
-Of course, this is ony a clunky example. Usually the `EntityManager` will be obtained  elsewhere, and it's the only thing required to build `JpaFilterQueryBuilder`.
+Of course, this is only a clunky example. Usually the `EntityManager` will be obtained  elsewhere, and it's the only thing required to build `JpaFilterQueryBuilder`.
 
 ### 6. Test the controller
 
@@ -156,4 +156,4 @@ To get only admins paginated and sorted by name:
 }
 ```
 
-And of course you can add a lot more fields to your `User` entity and then consider them in `UserFilter`. Besides `SingleValueQueryFilter`, which just filters our a single primitive value like `Boolean` or `Enum`, there're plenty of other predefined filters available and described [here](https://github.com/json-ql/jsonql-core).
+And of course you can add a lot more fields to your `User` entity and then consider them in `UserFilter`. Besides `SingleValueQueryFilter`, which just filters out a single primitive value like `Boolean` or `Enum`, there're plenty of other predefined filters available and described [here](https://github.com/json-ql/jsonql-core).
