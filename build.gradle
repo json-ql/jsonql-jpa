@@ -13,7 +13,7 @@ description 'JPA filter query builder for JSON-QL.'
   2. Tag with the same version tag and push
   3. Do `gradle publish`
  */
-version '1.0.2'
+version '1.0.3'
 
 sourceCompatibility = 1.8
 
@@ -40,6 +40,9 @@ if (!token) {
 publishing {
     publications {
         mavenJava(MavenPublication) {
+            pom.withXml { // https://discuss.gradle.org/t/maven-publish-plugin-generated-pom-making-dependency-scope-runtime/7494/10
+                asNode().dependencies.'*'.each { it.scope*.value = 'compile'}
+            }
             from components.java
             artifact sourcesJar
             artifact javadocJar
@@ -72,7 +75,6 @@ repositories {
 
 dependencies {
     implementation group: 'com.lifeinide.jsonql', name: 'jsonql-core', version: property('vJsonqlCore')
-    implementation group: 'org.slf4j', name: 'slf4j-api', version: property('vSlf4j')
     implementation group: 'javax.persistence', name:'javax.persistence-api', version: property('vJpa')
     compileOnly group: 'org.hibernate', name: 'hibernate-core', version: property('vHibernate')
 
@@ -86,25 +88,3 @@ dependencies {
 }
 
 def installer = install.repositories.mavenInstaller
-
-// alter maven pom
-installer.pom.whenConfigured {pom ->
-    pom.project {
-        name project.name
-        description description
-        url 'https://github.com/json-ql'
-        licenses {
-            license {
-                name 'The Apache Software License, Version 2.0'
-                url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-                distribution 'repo'
-            }
-        }
-        // remove test dependencies
-        for (Iterator itr = pom.dependencies.iterator(); itr.hasNext(); )
-            if (itr.next().scope == 'test')
-                itr.remove()
-    }
-}
-
-
