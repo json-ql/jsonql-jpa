@@ -17,6 +17,8 @@ public class JpaEntity implements IJsonQLTestEntity<Long, JpaAssociatedEntity> {
 
 	protected String stringVal;
 
+	protected boolean booleanVal;
+
 	protected Long longVal;
 
 	protected BigDecimal decimalVal;
@@ -54,6 +56,16 @@ public class JpaEntity implements IJsonQLTestEntity<Long, JpaAssociatedEntity> {
 	@Override
 	public void setStringVal(String stringVal) {
 		this.stringVal = stringVal;
+	}
+
+	@Override
+	public boolean isBooleanVal() {
+		return booleanVal;
+	}
+
+	@Override
+	public void setBooleanVal(boolean booleanVal) {
+		this.booleanVal = booleanVal;
 	}
 
 	@Override
