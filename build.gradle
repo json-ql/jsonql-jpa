@@ -78,10 +78,9 @@ dependencies {
     compile group: 'javax.persistence', name:'javax.persistence-api', version: property('vJpa')
     compileOnly group: 'org.hibernate', name: 'hibernate-core', version: property('vHibernate')
 
+    testCompile group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: property('vJunit')
     testCompile group: 'org.hibernate', name: 'hibernate-core', version: property('vHibernate')
     testCompile group: 'com.h2database', name: 'h2', version: property('vH2')
-
-    testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: property('vJunit')
     testRuntimeOnly group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: property('vJunit')
     testRuntimeOnly group: 'ch.qos.logback', name: 'logback-classic', version: property('vLogback')
 }
