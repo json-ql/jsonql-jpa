@@ -12,6 +12,7 @@ import org.hibernate.query.Query;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.annotation.Nonnull;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.*;
@@ -37,16 +38,16 @@ extends BaseFilterQueryBuilder<E, P, CriteriaQuery<E>, JpaQueryBuilderContext<E>
 	protected JpaQueryBuilderContext<E> context;
 	protected QueryConjunction conjunction = QueryConjunction.and;
 
-	protected JpaFilterQueryBuilder(EntityManager entityManager) {
+	protected JpaFilterQueryBuilder(@Nonnull EntityManager entityManager) {
 		this.context = new JpaQueryBuilderContext<>(entityManager, entityManager.getCriteriaBuilder());
 	}
 
-	public JpaFilterQueryBuilder(EntityManager entityManager, CriteriaQuery<E> query, Root<?> root) {
+	public JpaFilterQueryBuilder(@Nonnull EntityManager entityManager, @Nonnull CriteriaQuery<E> query, @Nonnull Root<?> root) {
 		this(entityManager);
 		init(query, root);
 	}
 
-	public JpaFilterQueryBuilder(EntityManager entityManager, Class<E> rootClass) {
+	public JpaFilterQueryBuilder(@Nonnull EntityManager entityManager, @Nonnull Class<E> rootClass) {
 		this(entityManager);
 		CriteriaQuery<E> query = context.getCb().createQuery(rootClass);
 		init(query, query.from(rootClass));
@@ -64,13 +65,15 @@ extends BaseFilterQueryBuilder<E, P, CriteriaQuery<E>, JpaQueryBuilderContext<E>
 		return this;
 	}
 
+	@Nonnull
 	@Override
 	public JpaQueryBuilderContext<E> context() {
 		return context;
 	}
 
+	@Nonnull
 	@Override
-	public JpaFilterQueryBuilder<E, P> add(String field, DateRangeQueryFilter filter) {
+	public JpaFilterQueryBuilder<E, P> add(@Nonnull String field, DateRangeQueryFilter filter) {
 		if (filter!=null) {
 			LocalDate from = filter.calculateFrom();
 			LocalDate to = filter.calculateTo();
@@ -89,8 +92,9 @@ extends BaseFilterQueryBuilder<E, P, CriteriaQuery<E>, JpaQueryBuilderContext<E>
 		return this;
 	}
 
+	@Nonnull
 	@Override
-	public JpaFilterQueryBuilder<E, P> add(String field, EntityQueryFilter<?> filter) {
+	public JpaFilterQueryBuilder<E, P> add(@Nonnull String field, EntityQueryFilter<?> filter) {
 		if (filter!=null) {
 			// discover id field name of the associated entity
 			Class<?> associatedEntityJavaType = context.getRoot().get(field).getJavaType();
@@ -105,8 +109,9 @@ extends BaseFilterQueryBuilder<E, P, CriteriaQuery<E>, JpaQueryBuilderContext<E>
 		return this;
 	}
 
+	@Nonnull
 	@Override
-	public JpaFilterQueryBuilder<E,P> add(String field, ListQueryFilter<?> filter) {
+	public JpaFilterQueryBuilder<E,P> add(@Nonnull String field, ListQueryFilter<?> filter) {
 		if (filter!=null) {
 			JpaFilterQueryBuilder<E, P> internalBuilder =
 				new JpaFilterQueryBuilder<>(context.getEntityManager(), context.getQuery(), context.getRoot());
@@ -121,8 +126,9 @@ extends BaseFilterQueryBuilder<E, P, CriteriaQuery<E>, JpaQueryBuilderContext<E>
 		return this;
 	}
 
+	@Nonnull
 	@Override
-	public JpaFilterQueryBuilder<E, P> add(String field, SingleValueQueryFilter<?> filter) {
+	public JpaFilterQueryBuilder<E, P> add(@Nonnull String field, SingleValueQueryFilter<?> filter) {
 		if (filter!=null) {
 			context.getPredicates().add(JpaCriteriaBuilderHelper.INSTANCE.buildCriteria(filter.getCondition(),
 				context.getCb(), context.getRoot().get(field), filter.getValue()));
@@ -131,9 +137,10 @@ extends BaseFilterQueryBuilder<E, P, CriteriaQuery<E>, JpaQueryBuilderContext<E>
 		return this;
 	}
 
+	@Nonnull
 	@SuppressWarnings({"unchecked", "rawtypes"})
 	@Override
-	public JpaFilterQueryBuilder<E, P> add(String field, ValueRangeQueryFilter<? extends Number> filter) {
+	public JpaFilterQueryBuilder<E, P> add(@Nonnull String field, ValueRangeQueryFilter<? extends Number> filter) {
 		if (filter!=null) {
 			Number from = filter.getFrom();
 			Number to = filter.getTo();
@@ -152,24 +159,27 @@ extends BaseFilterQueryBuilder<E, P, CriteriaQuery<E>, JpaQueryBuilderContext<E>
 		return this;
 	}
 
+	@Nonnull
 	@Override
-	public JpaFilterQueryBuilder<E, P> or(Runnable r) {
+	public JpaFilterQueryBuilder<E, P> or(@Nonnull Runnable r) {
 		List<Predicate> orPredicates = context.doWithNewPredicates(r);
 		if (!orPredicates.isEmpty())
 			context.getPredicates().add(context.getCb().or(orPredicates.toArray(new Predicate[0])));
 		return this;
 	}
 
+	@Nonnull
 	@Override
-	public JpaFilterQueryBuilder<E, P> and(Runnable r) {
+	public JpaFilterQueryBuilder<E, P> and(@Nonnull Runnable r) {
 		List<Predicate> andPredicates = context.doWithNewPredicates(r);
 		if (!andPredicates.isEmpty())
 			context.getPredicates().add(context.getCb().and(andPredicates.toArray(new Predicate[0])));
 		return this;
 	}
 
+	@Nonnull
 	@Override
-	public CriteriaQuery<E> build(Pageable pageable, Sortable<?> sortable) {
+	public CriteriaQuery<E> build(@Nonnull Pageable pageable, @Nonnull Sortable<?> sortable) {
 		return context.getQuery();
 	}
 
@@ -185,6 +195,7 @@ extends BaseFilterQueryBuilder<E, P, CriteriaQuery<E>, JpaQueryBuilderContext<E>
 		return Optional.empty();
 	}
 
+	@Nonnull
 	@SuppressWarnings({"unchecked", "rawtypes"})
 	@Override
 	public P list(Pageable pageable, Sortable<?> sortable) {
