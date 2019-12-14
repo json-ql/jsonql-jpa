@@ -169,7 +169,7 @@ extends BaseFilterQueryBuilder<E, P, CriteriaQuery<E>, JpaQueryBuilderContext<E>
 	}
 
 	@Override
-	public CriteriaQuery<E> build() {
+	public CriteriaQuery<E> build(Pageable pageable, Sortable<?> sortable) {
 		return context.getQuery();
 	}
 
