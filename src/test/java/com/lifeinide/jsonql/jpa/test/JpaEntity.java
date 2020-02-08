@@ -1,6 +1,7 @@
 package com.lifeinide.jsonql.jpa.test;
 
 import com.lifeinide.jsonql.core.test.IJsonQLTestEntity;
+import com.lifeinide.jsonql.core.test.IJsonQLTestParentEntity;
 import com.lifeinide.jsonql.core.test.JsonQLTestEntityEnum;
 
 import javax.persistence.*;
@@ -11,7 +12,7 @@ import java.time.LocalDate;
  * @author Lukasz Frankowski
  */
 @Entity
-public class JpaEntity implements IJsonQLTestEntity<Long, JpaAssociatedEntity> {
+public class JpaEntity implements IJsonQLTestEntity<Long>, IJsonQLTestParentEntity<Long, JpaAssociatedEntity> {
 
 	@Id private Long id;
 

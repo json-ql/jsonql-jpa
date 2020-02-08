@@ -6,6 +6,7 @@ import com.lifeinide.jsonql.jpa.JpaFilterQueryBuilder;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 
+import javax.annotation.Nonnull;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
@@ -20,7 +21,6 @@ import java.util.function.Consumer;
 public class JpaQueryBuilderTest extends JsonQLBaseQueryBuilderTest<
 	EntityManager,
 	Long,
-	JpaAssociatedEntity,
 	JpaEntity,
 	JpaFilterQueryBuilder<JpaEntity, Page<JpaEntity>>
 > {
@@ -41,6 +41,7 @@ public class JpaQueryBuilderTest extends JsonQLBaseQueryBuilderTest<
 			entityManagerFactory.close();
 	}
 
+	@Nonnull
 	@Override
 	protected JpaEntity buildEntity(Long previousId) {
 		return new JpaEntity(previousId==null ? 1L : previousId+1);
