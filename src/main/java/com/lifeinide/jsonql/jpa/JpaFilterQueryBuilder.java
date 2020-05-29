@@ -196,7 +196,7 @@ extends BaseFilterQueryBuilder<E, P, CriteriaQuery<E>, JpaQueryBuilderContext<E>
 	}
 
 	@Nonnull
-	@SuppressWarnings({"unchecked", "rawtypes"})
+	@SuppressWarnings({"unchecked", "rawtypes", "ConstantConditions"})
 	@Override
 	public P list(Pageable pageable, Sortable<?> sortable) {
 		if (pageable==null)
@@ -229,12 +229,14 @@ extends BaseFilterQueryBuilder<E, P, CriteriaQuery<E>, JpaQueryBuilderContext<E>
 		// apply pagination
 		TypedQuery<E> q = context.getEntityManager().createQuery(context.getQuery());
 		if (pageable.isPaged())
-			q.setFirstResult(pageable.getOffset()).setMaxResults(pageable.getPageSize());
+			q.setFirstResult(pageable.getOffset()).setMaxResults(getPageSize(pageable));
+		else if (maxResults!=null)
+			q.setMaxResults(maxResults);
 		if (logger.isTraceEnabled() && isHibernate())
 			logger.trace("Executing JPA query: {}", ((Query) q).getQueryString());
 
 		// create and execute main query
-		return (P) buildPageableResult(pageable.getPageSize(), pageable.getPage(), count, q.getResultList());
+		return (P) buildPageableResult(getPageSize(pageable), pageable.getPage(), count, q.getResultList());
 	}
 
 	protected boolean isHibernate() {
