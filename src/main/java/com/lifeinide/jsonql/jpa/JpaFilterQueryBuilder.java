@@ -128,6 +128,18 @@ extends BaseFilterQueryBuilder<E, P, CriteriaQuery<E>, JpaQueryBuilderContext<E>
 
 	@Nonnull
 	@Override
+	public JpaFilterQueryBuilder<E,P> add(@Nonnull String field, LikeQueryFilter filter) {
+		if (filter!=null) {
+			String pattern = filter.getPattern().toString();
+			Predicate predicate = pattern==null ? null : context.getCb().like(context.getRoot().get(field), pattern);
+			context.getPredicates().add(predicate);
+		}
+
+		return this;
+	}
+
+	@Nonnull
+	@Override
 	public JpaFilterQueryBuilder<E, P> add(@Nonnull String field, SingleValueQueryFilter<?> filter) {
 		if (filter!=null) {
 			context.getPredicates().add(JpaCriteriaBuilderHelper.INSTANCE.buildCriteria(filter.getCondition(),
