@@ -1,10 +1,17 @@
 package com.lifeinide.jsonql.jpa.test;
 
+import com.lifeinide.jsonql.core.dto.BasePageableRequest;
 import com.lifeinide.jsonql.core.dto.Page;
+import com.lifeinide.jsonql.core.intr.PageableResult;
 import com.lifeinide.jsonql.core.test.JsonQLBaseQueryBuilderTest;
+import com.lifeinide.jsonql.core.test.JsonQLQueryBuilderTestFeature;
+import com.lifeinide.jsonql.jpa.DefaultJpaFilterQueryBuilder;
 import com.lifeinide.jsonql.jpa.JpaFilterQueryBuilder;
+import com.lifeinide.jsonql.jpa.filter.LikeQueryFilter;
 import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
 import javax.annotation.Nonnull;
 import javax.persistence.EntityManager;
@@ -26,6 +33,10 @@ public class JpaQueryBuilderTest extends JsonQLBaseQueryBuilderTest<
 > {
 
 	public static final String PERSISTENCE_UNIT_NAME = "test-jpa";
+
+	public static final String SEARCHED_STRING_MATCHES = "phrase-%";
+	public static final String SEARCHED_STRING_NOT_MATCHES = "phrase-not-exists-%";
+	public static final String SEARCHED_STRING_FIRST_MATCH = "phrase-1";
 
 	protected EntityManagerFactory entityManagerFactory;
 
@@ -55,6 +66,27 @@ public class JpaQueryBuilderTest extends JsonQLBaseQueryBuilderTest<
 	@Override
 	protected void doTest(BiConsumer<EntityManager, JpaFilterQueryBuilder<JpaEntity, Page<JpaEntity>>> c) {
 		doWithEntityManager(em -> c.accept(em, new JpaFilterQueryBuilder<>(em, JpaEntity.class)));
+	}
+
+	@Test
+	public void testMatchingLikeQuery() {
+		doTest((pc, qb) -> {
+			PageableResult<JpaEntity> res = qb
+					.add("stringVal", LikeQueryFilter.of(SEARCHED_STRING_MATCHES))
+					.list(BasePageableRequest.ofUnpaged());
+			Assertions.assertEquals(100, res.getCount());
+			Assertions.assertEquals(SEARCHED_STRING_FIRST_MATCH, res.getData().iterator().next().getStringVal());
+		});
+	}
+
+	@Test
+	public void testNotMatchingLikeQuery() {
+		doTest((pc, qb) -> {
+			PageableResult<JpaEntity> res = qb
+					.add("stringVal", LikeQueryFilter.of(SEARCHED_STRING_NOT_MATCHES))
+					.list(BasePageableRequest.ofUnpaged());
+			Assertions.assertEquals(0, res.getCount());
+		});
 	}
 
 	protected void doWithEntityManager(Consumer<EntityManager> c) {
