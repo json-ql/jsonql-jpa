@@ -2,6 +2,7 @@ package com.lifeinide.jsonql.jpa.filter;
 
 import com.lifeinide.jsonql.core.intr.FilterQueryBuilder;
 import com.lifeinide.jsonql.core.intr.QueryFilter;
+import com.lifeinide.jsonql.jpa.JpaFilterQueryBuilder;
 
 /**
  * Filter for for like pattern matching.
@@ -30,6 +31,9 @@ public class LikeQueryFilter implements QueryFilter {
 
 	@Override
 	public void accept(FilterQueryBuilder builder, String field) {
+		if (builder instanceof JpaFilterQueryBuilder)
+			((JpaFilterQueryBuilder) builder).add(field, this);
+
 		builder.add(field, this);
 	}
 

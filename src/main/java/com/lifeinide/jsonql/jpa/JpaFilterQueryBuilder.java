@@ -131,7 +131,7 @@ extends BaseFilterQueryBuilder<E, P, CriteriaQuery<E>, JpaQueryBuilderContext<E>
 	public JpaFilterQueryBuilder<E,P> add(@Nonnull String field, LikeQueryFilter filter) {
 		if (filter!=null && filter.getPattern()!=null) {
 			String pattern = filter.getPattern();
-			Predicate predicate = context.getCb().like(context.getRoot().get(field), pattern);
+			context.getPredicates().add(context.getCb().like(context.getRoot().get(field), pattern));
 		}
 
 		return this;
