@@ -8,6 +8,7 @@ import com.lifeinide.jsonql.core.filters.*;
 import com.lifeinide.jsonql.core.intr.FilterQueryBuilder;
 import com.lifeinide.jsonql.core.intr.Pageable;
 import com.lifeinide.jsonql.core.intr.Sortable;
+import com.lifeinide.jsonql.jpa.filter.LikeQueryFilter;
 import org.hibernate.query.Query;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -121,6 +122,16 @@ extends BaseFilterQueryBuilder<E, P, CriteriaQuery<E>, JpaQueryBuilderContext<E>
 
 			filter.getFilters().forEach(f -> f.accept(internalBuilder, field));
 			internalBuilder.buildPredicate().ifPresent(predicate -> context.getPredicates().add(predicate));
+		}
+
+		return this;
+	}
+
+	@Nonnull
+	public JpaFilterQueryBuilder<E,P> add(@Nonnull String field, LikeQueryFilter filter) {
+		if (filter!=null && filter.getPattern()!=null) {
+			String pattern = filter.getPattern();
+			Predicate predicate = context.getCb().like(context.getRoot().get(field), pattern);
 		}
 
 		return this;
