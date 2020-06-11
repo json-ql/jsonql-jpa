@@ -4,8 +4,6 @@ import com.lifeinide.jsonql.core.dto.BasePageableRequest;
 import com.lifeinide.jsonql.core.dto.Page;
 import com.lifeinide.jsonql.core.intr.PageableResult;
 import com.lifeinide.jsonql.core.test.JsonQLBaseQueryBuilderTest;
-import com.lifeinide.jsonql.core.test.JsonQLQueryBuilderTestFeature;
-import com.lifeinide.jsonql.jpa.DefaultJpaFilterQueryBuilder;
 import com.lifeinide.jsonql.jpa.JpaFilterQueryBuilder;
 import com.lifeinide.jsonql.jpa.filter.LikeQueryFilter;
 import org.junit.jupiter.api.AfterAll;
@@ -65,7 +63,7 @@ public class JpaQueryBuilderTest extends JsonQLBaseQueryBuilderTest<
 
 	@Override
 	protected void doTest(BiConsumer<EntityManager, JpaFilterQueryBuilder<JpaEntity, Page<JpaEntity>>> c) {
-		doWithEntityManager(em -> c.accept(em, new JpaFilterQueryBuilder<>(em, JpaEntity.class)));
+		doWithEntityManager(em -> c.accept(em, new JpaFilterQueryBuilder<>(em, JpaEntity.class).withUnlimitedResults()));
 	}
 
 	@Test
