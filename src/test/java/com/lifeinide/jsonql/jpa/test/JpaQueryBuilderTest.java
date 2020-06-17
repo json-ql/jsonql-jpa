@@ -2,6 +2,7 @@ package com.lifeinide.jsonql.jpa.test;
 
 import com.lifeinide.jsonql.core.dto.BasePageableRequest;
 import com.lifeinide.jsonql.core.dto.Page;
+import com.lifeinide.jsonql.core.dto.Sort;
 import com.lifeinide.jsonql.core.intr.PageableResult;
 import com.lifeinide.jsonql.core.test.JsonQLBaseQueryBuilderTest;
 import com.lifeinide.jsonql.jpa.JpaFilterQueryBuilder;
@@ -71,7 +72,7 @@ public class JpaQueryBuilderTest extends JsonQLBaseQueryBuilderTest<
 		doTest((pc, qb) -> {
 			PageableResult<JpaEntity> res = qb
 					.add("stringVal", LikeQueryFilter.of(SEARCHED_STRING_MATCHES))
-					.list(BasePageableRequest.ofUnpaged());
+					.list(BasePageableRequest.ofUnpaged().withSort(Sort.ofAsc("stringVal")));
 			Assertions.assertEquals(4, res.getCount()); // phrase-af, phrase-bf, phrase-cf, phrase-df
 			Assertions.assertEquals(SEARCHED_STRING_FIRST_MATCH, res.getData().iterator().next().getStringVal());
 		});
