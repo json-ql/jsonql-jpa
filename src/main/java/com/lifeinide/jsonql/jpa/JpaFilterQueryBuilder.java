@@ -19,7 +19,10 @@ import javax.persistence.TypedQuery;
 import javax.persistence.criteria.*;
 import javax.persistence.metamodel.EntityType;
 import javax.persistence.metamodel.SingularAttribute;
+import java.time.Instant;
 import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -72,6 +75,7 @@ extends BaseFilterQueryBuilder<E, P, CriteriaQuery<E>, JpaQueryBuilderContext<E>
 		return context;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Nonnull
 	@Override
 	public JpaFilterQueryBuilder<E, P> add(@Nonnull String field, DateRangeQueryFilter filter) {
@@ -79,8 +83,24 @@ extends BaseFilterQueryBuilder<E, P, CriteriaQuery<E>, JpaQueryBuilderContext<E>
 			LocalDate from = filter.calculateFrom();
 			LocalDate to = filter.calculateTo();
 
-			Predicate predicate = from==null ? null : context.getCb().greaterThanOrEqualTo(context.getRoot().get(field), from);
-			Predicate toPredicate = to==null ? null : context.getCb().lessThan(context.getRoot().get(field), to);
+			Comparable fromObj = from;
+			Comparable toObj = to;
+
+			// do necessary conversion if the entity field is different than LocalDate
+			if (!context.getRoot().get(field).getJavaType().equals(LocalDate.class)) {
+				if (context.getRoot().get(field).getJavaType().equals(Instant.class)) {
+					fromObj = from.atStartOfDay(ZoneId.systemDefault()).toInstant();
+					toObj = to.atStartOfDay(ZoneId.systemDefault()).toInstant();
+				} else if (Date.class.isAssignableFrom(context.getRoot().get(field).getJavaType())) {
+					fromObj = Date.from(from.atStartOfDay(ZoneId.systemDefault()).toInstant());
+					toObj = Date.from(to.atStartOfDay(ZoneId.systemDefault()).toInstant());
+				} else
+					throw new IllegalStateException(String.format("Unsupported field: %s type: %s", field,
+						context.getRoot().get(field).getJavaType().getName()));
+			}
+
+			Predicate predicate = fromObj==null ? null : context.getCb().greaterThanOrEqualTo(context.getRoot().get(field), fromObj);
+			Predicate toPredicate = toObj==null ? null : context.getCb().lessThan(context.getRoot().get(field), toObj);
 
 			predicate = (predicate!=null && toPredicate!=null)
 				? context.getCb().and(predicate, toPredicate)
